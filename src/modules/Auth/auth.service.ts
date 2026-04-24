@@ -1,6 +1,8 @@
+import config from "../../config";
 import { UserRole } from "../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const createUser = async (payload: {
     email: string;
@@ -8,7 +10,7 @@ const createUser = async (payload: {
     password: string;
     role: UserRole;
 }) => {
-    console.log("create user service...: ", payload);
+    // console.log("create user service...: ", payload);
 
     const existingUser = await prisma.user.findUnique({
         where: {
@@ -32,6 +34,47 @@ const createUser = async (payload: {
     return remainingResult;
 };
 
+const userLogin = async(payload: {
+    email: string;
+    password: string;
+}) =>{
+    const isExist = await prisma.user.findUnique({
+        where: {
+            email: payload.email,
+        },
+    });
+
+    if(!isExist) {
+        throw new Error("User not found. Re-check your credentials. Or register yourself.");
+    }
+
+    const isPasswordMatched = await bcrypt.compare(payload.password, isExist.password);
+
+    if(!isPasswordMatched) {
+        throw new Error("Invalid password. Please provide correct password.");
+    }
+
+    const userDataInsideJwtToken = {
+        id: isExist.id,
+        name: isExist.name,
+        email: isExist.email,
+        role: isExist.role,
+        status: isExist.status,
+    };
+
+    const token = jwt.sign(userDataInsideJwtToken, config.jwtSecret as string, {expiresIn: "7d"});
+
+    const {password, ...remainingUserData} = isExist;
+
+    return {
+        token,
+        userData: remainingUserData,
+    }
+
+}
+
+
 export const authService = {
     createUser,
+    userLogin,
 };
