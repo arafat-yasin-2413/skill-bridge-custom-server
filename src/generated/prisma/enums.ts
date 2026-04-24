@@ -16,3 +16,28 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const TutorStatus = {
+  AVAILABLE: 'AVAILABLE',
+  NOTAVAILABLE: 'NOTAVAILABLE'
+} as const
+
+export type TutorStatus = (typeof TutorStatus)[keyof typeof TutorStatus]
+
+
+export const BookingStatus = {
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
+
+
+export const ReviewStatus = {
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
