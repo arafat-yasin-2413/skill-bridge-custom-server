@@ -1,0 +1,143 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum UserRole {
+    STUDENT
+    TUTOR
+    ADMIN
+}
+
+enum TutorStatus {
+    AVAILABLE
+    NOTAVAILABLE
+}
+
+enum BookingStatus {
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+enum ReviewStatus {
+    APPROVED
+    REJECTED
+}
+
+// 1 user : 1 tutor profile ✅ 
+// 1 tutor → 1 category te porabe
+// One-to-Many (Category → Tutors)
+
+// 1 Category → Many Tutor
+// 1 Tutor → Only 1 Category
+
+model User {
+    id           String        @id @default(uuid())
+    email        String        @unique
+    name         String?
+    role         UserRole
+    password     String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    tutorProfile TutorProfile?
+    bookings     Booking[]
+    reviews      Review[]
+}
+
+model Category {
+    id   String @id @default(uuid())
+    name String @unique
+
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    tutorProfiles TutorProfile[]
+}
+
+model TutorProfile {
+    id         String      @id @default(uuid())
+    userId     String      @unique
+    categoryId String // 1 tutor has 1 category
+    status     TutorStatus
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+    category            Category            @relation(fields: [categoryId], references: [id])
+    tutorAvailabilities TutorAvailability[]
+    bookings            Booking[]
+    reviews             Review[]
+
+    @@index([categoryId])
+    @@index([status])
+    @@map("tutorProfiles")
+}
+
+model TutorAvailability {
+    id      String @id @default(uuid())
+    tutorId String
+
+    startTime DateTime
+    endTime   DateTime
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tutor TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+    @@index([tutorId, startTime])
+    @@index([tutorId, endTime])
+}
+
+model Booking {
+    id        String        @id @default(uuid())
+    tutorId   String
+    studentId String
+    status    BookingStatus @default(CONFIRMED)
+
+    startTime DateTime
+    endTime   DateTime
+
+    tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+    student User         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    reviews   Review[]
+
+    @@index([tutorId, startTime])
+    @@index([studentId])
+    @@index([status])
+    @@index([startTime])
+    @@map("bookings")
+}
+
+model Review {
+    id String @id @default(uuid())
+
+    studentId String
+    tutorId   String
+    bookingId String
+
+    rating  Int // 1 to 5
+    comment String?
+    status  ReviewStatus @default(APPROVED)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tutor   TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+    student User         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    booking Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+    @@index([tutorId])
+    @@index([tutorId, status])
+    @@index([studentId])
+    @@index([bookingId])
+    @@map("reviews")
+}
