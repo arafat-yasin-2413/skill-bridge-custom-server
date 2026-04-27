@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { authRoutes } from './modules/Auth/auth.route';
+import { authRoutes } from './modules/auth/auth.route';
+import { userRoutes } from './modules/user/user.route';
 
 const app: Application = express();
 
@@ -11,6 +12,7 @@ app.use(cors());
 // application routes
 // app.use('/api/v1', router);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Apollo Gears World!');
