@@ -4,6 +4,7 @@ import { userService } from "./user.service";
 const getAllUser = async (req: Request, res: Response) => {
     try {
         const result = await userService.getAllUser();
+        // console.log(result);
         return res.status(200).json({
             success: true,
             data: result,
