@@ -5,6 +5,7 @@ import { categoryControllers } from "./category.controller";
 
 const router = express.Router();
 
+router.get("/all", categoryControllers.getAllCategory);
 router.post("/create", auth(UserRole.ADMIN), categoryControllers.createCategory);
 
 export const categoryRoutes = router;
