@@ -42,16 +42,18 @@ enum ReviewStatus {
 // 1 Category → Many Tutor
 // 1 Tutor → Only 1 Category
 
-
 model User {
-    id           String        @id @default(uuid())
-    email        String        @unique
-    name         String?
-    role         UserRole
-    password     String
-    status       UserStatus    @default(ACTIVE)
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
+    id         String     @id @default(uuid())
+    email      String     @unique
+    name       String?
+    role       UserRole
+    password   String?
+    provider   String?
+    providerId String?
+    status     UserStatus @default(ACTIVE)
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+
     tutorProfile TutorProfile?
     bookings     Booking[]
     reviews      Review[]

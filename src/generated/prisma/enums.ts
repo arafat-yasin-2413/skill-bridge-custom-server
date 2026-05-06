@@ -28,6 +28,7 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 export const TutorStatus = {
   AVAILABLE: 'AVAILABLE',
+  BOOKED: 'BOOKED',
   NOTAVAILABLE: 'NOTAVAILABLE'
 } as const
 
