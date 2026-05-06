@@ -42,6 +42,7 @@ enum ReviewStatus {
 // 1 Category → Many Tutor
 // 1 Tutor → Only 1 Category
 
+
 model User {
     id           String        @id @default(uuid())
     email        String        @unique
