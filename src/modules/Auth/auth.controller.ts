@@ -39,15 +39,25 @@ const userLogin = async (req: Request, res: Response) => {
 
 export const googleCallback = async (req: Request, res: Response) => {
     try {
-        const { email, name, image, sub } = req.body;
+        const { email, name, image, sub, role } = req.body;
         // sub = google provider id
 
+        // step 1 : securing the roles here
+        const allowedRoles = ["STUDENT", "TUTOR"];
+        let safeRole: "STUDENT" | "TUTOR" = "STUDENT";
+
+        if (allowedRoles.includes(role)) {
+            safeRole = role;
+        }
+
+        // step 2 : checking user existence
         let user = await prisma.user.findUnique({
             where: {
                 email,
             },
         });
 
+        // step 3 : creating new user
         if (!user) {
             // now, create new user
             user = await prisma.user.create({
@@ -55,12 +65,34 @@ export const googleCallback = async (req: Request, res: Response) => {
                     email,
                     name,
                     password: null,
-                    role: "STUDENT",
+                    role: safeRole,
                     provider: "google",
                     providerId: sub,
                 },
             });
         }
+
+        // step 4 : if Tutor --> create Tutor Profile
+        if (safeRole === "TUTOR") {
+            await prisma.tutorProfile.create({
+                data: {
+                    userId: user.id,
+                    categoryId: "REPLACE-WITH-DYNAMIC-CATEGORY-ID",
+                    status: "AVAILABLE",
+                },
+            });
+        }
+
+        // step 5 : existing user --> provider update (if needed)
+        // if (user && !user.provider) {
+        //     user = await prisma.user.update({
+        //         where: { email },
+        //         data: {
+        //             provider: "google",
+        //             providerId: sub,
+        //         },
+        //     });
+        // }
 
         // JWT generate (same as login function)
         const token = jwt.sign(
