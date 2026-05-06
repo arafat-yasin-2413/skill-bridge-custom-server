@@ -48,6 +48,7 @@ const userLogin = async(payload: {
         throw new Error("User not found. Re-check your credentials. Or register yourself.");
     }
 
+    
     const isPasswordMatched = await bcrypt.compare(payload.password, isExist.password);
 
     if(!isPasswordMatched) {
