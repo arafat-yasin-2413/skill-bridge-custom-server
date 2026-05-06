@@ -35,6 +35,11 @@ enum ReviewStatus {
     REJECTED
 }
 
+enum AuthProvider {
+    credentials
+    google
+}
+
 // 1 user : 1 tutor profile ✅ 
 // 1 tutor → 1 category te porabe
 // One-to-Many (Category → Tutors)
@@ -43,16 +48,19 @@ enum ReviewStatus {
 // 1 Tutor → Only 1 Category
 
 model User {
-    id         String     @id @default(uuid())
-    email      String     @unique
-    name       String?
-    role       UserRole
-    password   String?
-    provider   String?
+    id       String  @id @default(uuid())
+    email    String  @unique
+    name     String?
+    password String?
+
+    provider   AuthProvider @default(credentials)
     providerId String?
-    status     UserStatus @default(ACTIVE)
-    createdAt  DateTime   @default(now())
-    updatedAt  DateTime   @updatedAt
+
+    role   UserRole
+    status UserStatus @default(ACTIVE)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     tutorProfile TutorProfile?
     bookings     Booking[]

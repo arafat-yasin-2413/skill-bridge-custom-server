@@ -34,24 +34,32 @@ const createUser = async (payload: {
     return remainingResult;
 };
 
-const userLogin = async(payload: {
-    email: string;
-    password: string;
-}) =>{
+const userLogin = async (payload: { email: string; password: string }) => {
     const isExist = await prisma.user.findUnique({
         where: {
             email: payload.email,
         },
     });
 
-    if(!isExist) {
-        throw new Error("User not found. Re-check your credentials. Or register yourself.");
+    if (!isExist) {
+        throw new Error(
+            "User not found. Re-check your credentials. Or register yourself.",
+        );
+    }
+    if (isExist.provider !== "credentials") {
+        throw new Error(`Please login using ${isExist.provider}`);
     }
 
-    
-    const isPasswordMatched = await bcrypt.compare(payload.password, isExist.password);
+    if (!isExist.password) {
+        throw new Error("Password not set for this account.");
+    }
 
-    if(!isPasswordMatched) {
+    const isPasswordMatched = await bcrypt.compare(
+        payload.password,
+        isExist.password as string,
+    );
+
+    if (!isPasswordMatched) {
         throw new Error("Invalid password. Please provide correct password.");
     }
 
@@ -63,17 +71,17 @@ const userLogin = async(payload: {
         status: isExist.status,
     };
 
-    const token = jwt.sign(userDataInsideJwtToken, config.jwtSecret as string, {expiresIn: "7d"});
+    const token = jwt.sign(userDataInsideJwtToken, config.jwtSecret as string, {
+        expiresIn: "7d",
+    });
 
-    const {password, ...remainingUserData} = isExist;
+    const { password, ...remainingUserData } = isExist;
 
     return {
         token,
         userData: remainingUserData,
-    }
-
-}
-
+    };
+};
 
 export const authService = {
     createUser,
