@@ -2,8 +2,10 @@ import bcrypt from "bcryptjs";
 import { UserRole } from "../middlewares/auth";
 import { prisma } from "../lib/prisma";
 
+const adminPassword = "admin1234"
+
 const seedAdmin = async () => {
-    const hashedPassword = await bcrypt.hash("admin1234", 10);
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     const adminData = {
         name: "Admin1",

@@ -4,6 +4,7 @@ import { authRoutes } from './modules/auth/auth.route';
 import { userRoutes } from './modules/user/user.route';
 import { categoryRoutes } from './modules/category/category.route';
 import { notFound } from './middlewares/notFound';
+import { tutorRoutes } from './modules/tutor/tutor.route';
 
 const app: Application = express();
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/tutor", tutorRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Apollo Gears World!');
