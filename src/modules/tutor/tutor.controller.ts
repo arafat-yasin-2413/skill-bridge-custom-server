@@ -49,7 +49,27 @@ const getAllTutorProfiles = async (req: Request, res: Response) => {
     }
 };
 
+const getSingleTutorProfile = async(req: Request, res:Response) =>{
+    try{
+        const profileId = req.params.id;
+        const result = await tutorServices.getSingleTutorProfile(profileId as string)
+
+        return res.status(200).json({
+            success:true,
+            message: "Got Tutuor Profile Details Successfully.",
+            data: result,
+        })
+    }
+    catch(error:any) {
+        return res.status(500).json({
+            success:false,
+            message: error.message,
+        })
+    }
+}
+
 export const tutorController = {
     createTutorProfile,
     getAllTutorProfiles,
+    getSingleTutorProfile,
 };
