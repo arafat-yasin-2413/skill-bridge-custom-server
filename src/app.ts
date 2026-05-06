@@ -3,6 +3,7 @@ import cors from 'cors';
 import { authRoutes } from './modules/auth/auth.route';
 import { userRoutes } from './modules/user/user.route';
 import { categoryRoutes } from './modules/category/category.route';
+import { notFound } from './middlewares/notFound';
 
 const app: Application = express();
 
@@ -20,4 +21,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Apollo Gears World!');
 });
 
+app.use(notFound);
+
 export default app;
+
