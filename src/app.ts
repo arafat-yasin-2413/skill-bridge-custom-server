@@ -1,10 +1,10 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { authRoutes } from './app/modules/auth/auth.route';
-import { userRoutes } from './modules/user/user.route';
-import { categoryRoutes } from './modules/category/category.route';
-import { notFound } from './middlewares/notFound';
-import { tutorRoutes } from './modules/tutor/tutor.route';
+import { userRoutes } from './app/modules/user/user.route';
+import { categoryRoutes } from './app/modules/category/category.route';
+import { tutorRoutes } from './app/modules/tutor/tutor.route';
+import { notFound } from './app/middlewares/notFound';
 
 const app: Application = express();
 
