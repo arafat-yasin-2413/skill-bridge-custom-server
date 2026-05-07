@@ -5,8 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts && tsx watch src/server.ts",
+    "build": "tsc && node scripts/fix-imports.js",
     "seed:admin": "tsc && node dist/seed/seedAdmin.js",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
