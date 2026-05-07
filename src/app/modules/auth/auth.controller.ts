@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { authService } from "./auth.service";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import jwt from "jsonwebtoken";
-import config from "../../config";
+import config from "../../../config";
 
 const createUser = async (req: Request, res: Response) => {
     // console.log("create user controller ...: ", req.body);

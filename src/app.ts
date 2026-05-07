@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { authRoutes } from './modules/auth/auth.route';
+import { authRoutes } from './app/modules/auth/auth.route';
 import { userRoutes } from './modules/user/user.route';
 import { categoryRoutes } from './modules/category/category.route';
 import { notFound } from './middlewares/notFound';

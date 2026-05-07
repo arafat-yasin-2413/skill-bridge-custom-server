@@ -1,6 +1,6 @@
-import config from "../../config";
-import { UserRole } from "../../generated/prisma/enums";
-import { prisma } from "../../lib/prisma";
+import config from "../../../config";
+import { UserRole } from "../../../generated/prisma/enums";
+import { prisma } from "../../../lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 

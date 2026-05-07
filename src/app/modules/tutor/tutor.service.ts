@@ -1,5 +1,5 @@
-import { TutorStatus, UserRole } from "../../generated/prisma/enums";
-import { prisma } from "../../lib/prisma";
+import { TutorStatus } from "../../../generated/prisma/enums";
+import { prisma } from "../../../lib/prisma";
 
 const createTutorProfile = async (
     payload: {

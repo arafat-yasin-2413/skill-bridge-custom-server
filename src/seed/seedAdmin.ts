@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import { UserRole } from "../middlewares/auth";
 import { prisma } from "../lib/prisma";
+import { UserRole } from "../app/middlewares/auth";
 
 const adminPassword = "admin1234"
 
