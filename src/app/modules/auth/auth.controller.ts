@@ -6,7 +6,7 @@ import config from "../../../config";
 
 const createUser = async (req: Request, res: Response) => {
     console.log("create user controller. Body from frontend...: ", req.body);
-    console.log('type of body: ', typeof(req.body));
+    // console.log('type of body: ', typeof(req.body));
     try {
         const result = await authService.createUser(req.body);
         return res.status(201).json({
