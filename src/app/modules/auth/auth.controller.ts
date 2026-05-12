@@ -23,8 +23,20 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 const userLogin = async (req: Request, res: Response) => {
+    const isProduction = config.nodeEnv === "production";
     try {
         const result = await authService.userLogin(req.body);
+
+        console.log('Body from frontend for login: ', req.body);
+        
+        // console.log('Result.token after login : ', result.token);
+        res.cookie("token", result.token, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "none": "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+
         return res.status(200).json({
             success: true,
             message: "User Logged in Successfully.",

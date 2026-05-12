@@ -5,14 +5,17 @@ import { userRoutes } from './app/modules/user/user.route';
 import { categoryRoutes } from './app/modules/category/category.route';
 import { tutorRoutes } from './app/modules/tutor/tutor.route';
 import { notFound } from './app/middlewares/notFound';
+import cookieParser from 'cookie-parser';
 
 const app: Application = express();
 
 // parsers
 app.use(express.json());
 // app.use(cors());
+app.use(cookieParser());
 app.use(cors({
-    origin: process.env.FRONTEND_URL
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
 }));
 
 // application routes

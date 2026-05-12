@@ -1,5 +1,8 @@
 import { betterAuth } from "better-auth";
 import { oAuthProxy } from "better-auth/plugins";
+import config from "../config";
+
+const isProduction= config.nodeEnv === "production"
 
 export const auth = betterAuth({
     baseURL: process.env.FRONTEND_URL,
@@ -18,8 +21,8 @@ export const auth = betterAuth({
                 name: "session_token",
                 attributes: {
                     httpOnly: true,
-                    secure: true,
-                    sameSite: "none",
+                    secure: isProduction,
+                    sameSite: isProduction? "none": "lax",
                     partitioned: true,
                 },
             },
