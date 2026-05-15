@@ -86,15 +86,15 @@ export const googleCallback = async (req: Request, res: Response) => {
         }
 
         // step 4 : if Tutor --> create Tutor Profile
-        if (safeRole === "TUTOR") {
-            await prisma.tutorProfile.create({
-                data: {
-                    userId: user.id,
-                    categoryId: "REPLACE-WITH-DYNAMIC-CATEGORY-ID",
-                    status: "AVAILABLE",
-                },
-            });
-        }
+        // if (safeRole === "TUTOR") {
+        //     await prisma.tutorProfile.create({
+        //         data: {
+        //             userId: user.id,
+        //             categoryId: "REPLACE-WITH-DYNAMIC-CATEGORY-ID",
+        //             status: "AVAILABLE",
+        //         },
+        //     });
+        // }
 
         // step 5 : existing user --> provider update (if needed)
         // if (user && !user.provider) {
