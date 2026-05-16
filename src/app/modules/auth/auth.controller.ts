@@ -70,7 +70,15 @@ export const googleCallback = async (req: Request, res: Response) => {
             },
         });
 
-        // step 3 : creating new user
+        // existing non-google user
+        if(user && user.provider !== "google") {
+            return res.status(400).json({
+                success: false,
+                message: "This account already exists with email/password login.",
+            });
+        }
+
+        // create google user 
         if (!user) {
             // now, create new user
             user = await prisma.user.create({
@@ -85,28 +93,6 @@ export const googleCallback = async (req: Request, res: Response) => {
             });
         }
 
-        // step 4 : if Tutor --> create Tutor Profile
-        // if (safeRole === "TUTOR") {
-        //     await prisma.tutorProfile.create({
-        //         data: {
-        //             userId: user.id,
-        //             categoryId: "REPLACE-WITH-DYNAMIC-CATEGORY-ID",
-        //             status: "AVAILABLE",
-        //         },
-        //     });
-        // }
-
-        // step 5 : existing user --> provider update (if needed)
-        // if (user && !user.provider) {
-        //     user = await prisma.user.update({
-        //         where: { email },
-        //         data: {
-        //             provider: "google",
-        //             providerId: sub,
-        //         },
-        //     });
-        // }
-
         // JWT generate (same as login function)
         const token = jwt.sign(
             {
@@ -119,7 +105,13 @@ export const googleCallback = async (req: Request, res: Response) => {
             { expiresIn: "7d" },
         );
 
-        return res.json({ token, user });
+        // return res.json({ token, user });
+        return res.status(200).json({
+            success: true,
+            message: "Google authentication successfull",
+            token, 
+            user,
+        });
     } catch (error: any) {
         console.error(error);
         return res.status(500).json({

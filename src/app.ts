@@ -6,6 +6,8 @@ import { categoryRoutes } from './app/modules/category/category.route';
 import { tutorRoutes } from './app/modules/tutor/tutor.route';
 import { notFound } from './app/middlewares/notFound';
 import cookieParser from 'cookie-parser';
+import { toNodeHandler } from 'better-auth/node';
+import { auth } from './lib/auth';
 
 const app: Application = express();
 
@@ -17,6 +19,8 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
+
+app.all("/api/auth/*splat",toNodeHandler(auth));
 
 // application routes
 // app.use('/api/v1', router);

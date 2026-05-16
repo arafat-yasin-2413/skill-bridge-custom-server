@@ -5,7 +5,7 @@ import config from "../config";
 const isProduction= config.nodeEnv === "production"
 
 export const auth = betterAuth({
-    baseURL: process.env.FRONTEND_URL,
+    baseURL: process.env.BACKEND_URL,
     trustedOrigins: [process.env.FRONTEND_URL!],
 
     socialProviders: {
@@ -23,7 +23,7 @@ export const auth = betterAuth({
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: isProduction? "none": "lax",
-                    partitioned: true,
+                    partitioned: false,
                 },
             },
             state: {
@@ -32,11 +32,12 @@ export const auth = betterAuth({
                     httpOnly: true,
                     secure: true,
                     sameSite: "none",
-                    partitioned: true,
+                    partitioned: false,
                 },
             },
         },
     },
 
-    plugins: [oAuthProxy()],
+    // TODO: uncomment this before production
+    // plugins: [oAuthProxy()],
 });
