@@ -23,7 +23,7 @@ export const auth = betterAuth({
                     httpOnly: true,
                     secure: isProduction,
                     sameSite: isProduction? "none": "lax",
-                    partitioned: false,
+                    partitioned: false, // it should be kept true
                 },
             },
             state: {
@@ -32,7 +32,7 @@ export const auth = betterAuth({
                     httpOnly: true,
                     secure: true,
                     sameSite: "none",
-                    partitioned: false,
+                    partitioned: false, // it should be kept true
                 },
             },
         },
